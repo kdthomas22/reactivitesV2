@@ -30,8 +30,9 @@ const requests = {
 };
 
 const Activities = {
-  list: () => requests.get<Activity[]>("/activities"),
-  details: (id: string) => requests.get<Activity>(`/activities/${id}`),
+  getActivities: () => requests.get<Activity[]>("/activities"),
+  getActivityDetails: (id: string) =>
+    requests.get<Activity>(`/activities/${id}`),
   createActivity: (activity: Activity) =>
     requests.post("/activities", activity),
   updateActivity: (activity: Activity) =>
