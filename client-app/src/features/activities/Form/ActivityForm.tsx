@@ -1,19 +1,21 @@
 import { observer } from "mobx-react";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Button, Form, Segment } from "semantic-ui-react";
+import Loading from "../../../app/layout/Loading";
 import { useStore } from "../../../app/stores/store";
+import { v4 as uuid } from "uuid";
 
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
   const {
-    selectedActivity,
-    closeForm,
     createActivity,
     editActivity,
     loading,
+    getActivityDetails,
+    loadingInitial,
   } = activityStore;
-
-  const initialState = selectedActivity ?? {
+  const [activity, setActivity] = useState({
     id: "",
     title: "",
     category: "",
@@ -21,12 +23,24 @@ export default observer(function ActivityForm() {
     date: "",
     description: "",
     venue: "",
-  };
-
-  const [activity, setActivity] = useState(initialState);
+  });
+  const { id } = useParams<{ id: string }>();
+  const history = useHistory();
 
   function handleSubmit() {
-    activity.id ? editActivity(activity) : createActivity(activity);
+    if (activity.id.length === 0) {
+      let newActivity = {
+        ...activity,
+        id: uuid(),
+      };
+      createActivity(newActivity).then(() => {
+        history.push(`/activities/${newActivity.id}`);
+      });
+    } else {
+      editActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
+    }
   }
 
   function handleInputChange(
@@ -35,6 +49,16 @@ export default observer(function ActivityForm() {
     const { name, value } = e.target;
     setActivity({ ...activity, [name]: value });
   }
+
+  useEffect(() => {
+    if (id) {
+      getActivityDetails(id).then((activity) => {
+        setActivity(activity!);
+      });
+    }
+  }, [id, getActivityDetails]);
+
+  if (loadingInitial) return <Loading content="Loading ..." />;
 
   return (
     <Segment clearing>
@@ -87,7 +111,8 @@ export default observer(function ActivityForm() {
           floated="right"
           type="button"
           content="Cancel"
-          onClick={closeForm}
+          as={Link}
+          to="/activities"
         />
       </Form>
     </Segment>
