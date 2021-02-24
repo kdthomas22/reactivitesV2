@@ -5,5 +5,5 @@ export interface Activity {
   city: string;
   venue: string;
   category: string;
-  date: string;
+  date: Date | null;
 }
