@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Application.Profiles;
 
 namespace Application.Dtos
 {
-    public class ActivityDto
+  public class ActivityDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -15,6 +14,6 @@ namespace Application.Dtos
         public string Category { get; set; }  
         public string HostUsername { get; set; }
         public bool IsCancelled { get; set; }
-        public ICollection<Profile> Attendees { get; set; }
+        public ICollection<AttendeeDto> Attendees { get; set; }
     }
 }
