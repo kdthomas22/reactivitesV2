@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using reactivitiesV2.Domain;
 
 namespace Domain
 {
@@ -14,5 +15,6 @@ namespace Domain
         public string Category { get; set; }  
         public bool IsCancelled { get; set; }
         public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
