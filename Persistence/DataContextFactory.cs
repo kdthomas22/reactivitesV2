@@ -13,7 +13,7 @@ namespace Persistence
       var config = builder.Build();
  
       var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-      optionsBuilder.UseSqlite(config.GetConnectionString("DefaultConnection"));
+      optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"));
  
       return new DataContext(optionsBuilder.Options);
     }
